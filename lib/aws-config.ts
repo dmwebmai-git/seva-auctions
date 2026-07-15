@@ -108,6 +108,8 @@ export function createS3Client() {
   if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     return new S3Client({
       region,
+      endpoint: process.env.AWS_ENDPOINT_URL,    
+      forcePathStyle: true,                        
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,

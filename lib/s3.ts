@@ -73,6 +73,11 @@ function getContentType(fileName: string): string {
 }
 
 export function getPublicUrl(key: string): string {
+  const base = process.env.FILE_PUBLIC_BASE_URL
+  if (base) {
+    return `${base.replace(/\/$/, '')}/${key}`
+  }
+  // fallback (old Amazon style) if the base URL is not set
   return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 }
 
