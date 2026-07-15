@@ -104,11 +104,11 @@ export default async function AnalyticsPage() {
 
   // Chart data
   const categoryBarData = categoryCounts
-    .map((c) => ({ name: c.category, count: c._count._all }))
+    .map((c: { category: string; _count: { _all: number } }) => ({ name: c.category, count: c._count._all }))
     .sort((a, b) => b.count - a.count)
 
   const bidsByCategory = categorySums
-    .map((c) => ({ name: c.category, value: c._sum.totalBids || 0 }))
+    .map((c: { category: string; _sum: { totalBids: number | null; viewCount: number | null } }) => ({ name: c.category, value: c._sum.totalBids || 0 }))
     .sort((a, b) => b.value - a.value)
 
   // Funds raised for organizations, by category (realized from won + in-progress from active)
@@ -142,7 +142,7 @@ export default async function AnalyticsPage() {
 
   // Most popular categories table (by bids, then views)
   const popularCategories = categorySums
-    .map((c) => ({
+    .map((c: { category: string; _sum: { totalBids: number | null; viewCount: number | null } }) => ({
       category: c.category,
       bids: c._sum.totalBids || 0,
       views: c._sum.viewCount || 0,
