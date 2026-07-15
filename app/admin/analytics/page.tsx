@@ -103,12 +103,15 @@ export default async function AnalyticsPage() {
   const wonAvg = Number(wonAgg._avg.winningBid || 0)
 
   // Chart data
-  const categoryBarData = categoryCounts
-    .map((c: { category: string; _count: { _all: number } }) => ({ name: c.category, count: c._count._all }))
+  const categoryCountsTyped = categoryCounts as Array<{ category: string; _count: { _all: number } }>
+  const categorySumsTyped = categorySums as Array<{ category: string; _sum: { totalBids: number | null; viewCount: number | null } }>
+
+  const categoryBarData = categoryCountsTyped
+    .map((c) => ({ name: c.category, count: c._count._all }))
     .sort((a, b) => b.count - a.count)
 
-  const bidsByCategory = categorySums
-    .map((c: { category: string; _sum: { totalBids: number | null; viewCount: number | null } }) => ({ name: c.category, value: c._sum.totalBids || 0 }))
+  const bidsByCategory = categorySumsTyped
+    .map((c) => ({ name: c.category, value: c._sum.totalBids || 0 }))
     .sort((a, b) => b.value - a.value)
 
   // Funds raised for organizations, by category (realized from won + in-progress from active)
@@ -141,8 +144,8 @@ export default async function AnalyticsPage() {
   ]
 
   // Most popular categories table (by bids, then views)
-  const popularCategories = categorySums
-    .map((c: { category: string; _sum: { totalBids: number | null; viewCount: number | null } }) => ({
+  const popularCategories = categorySumsTyped
+    .map((c) => ({
       category: c.category,
       bids: c._sum.totalBids || 0,
       views: c._sum.viewCount || 0,
