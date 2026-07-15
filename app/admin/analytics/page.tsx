@@ -105,6 +105,8 @@ export default async function AnalyticsPage() {
   // Chart data
   const categoryCountsTyped = categoryCounts as Array<{ category: string; _count: { _all: number } }>
   const categorySumsTyped = categorySums as Array<{ category: string; _sum: { totalBids: number | null; viewCount: number | null } }>
+  const topByBidsTyped = topByBids as Array<{ id: string; title: string; category: string; totalBids: number; currentBid: unknown }>
+  const topByViewsTyped = topByViews as Array<{ id: string; title: string; category: string; viewCount: number }>
 
   const categoryBarData = categoryCountsTyped
     .map((c) => ({ name: c.category, count: c._count._all }))
@@ -307,11 +309,11 @@ export default async function AnalyticsPage() {
               <CardTitle className="text-lg text-[#524C4C]">Most Popular Auctions (by Bids)</CardTitle>
             </CardHeader>
             <CardContent>
-              {topByBids.length === 0 ? (
+              {topByBidsTyped.length === 0 ? (
                 <p className="text-sm text-gray-500">No auctions yet.</p>
               ) : (
                 <div className="divide-y divide-gray-100">
-                  {topByBids.map((p, i) => (
+                  {topByBidsTyped.map((p, i) => (
                     <Link
                       key={p.id}
                       href={`/package/${p.id}`}
@@ -340,11 +342,11 @@ export default async function AnalyticsPage() {
               <CardTitle className="text-lg text-[#524C4C]">Most Viewed Auctions</CardTitle>
             </CardHeader>
             <CardContent>
-              {topByViews.length === 0 || topByViews.every((p) => p.viewCount === 0) ? (
+              {topByViewsTyped.length === 0 || topByViewsTyped.every((p) => p.viewCount === 0) ? (
                 <p className="text-sm text-gray-500">No page views recorded yet.</p>
               ) : (
                 <div className="divide-y divide-gray-100">
-                  {topByViews.map((p, i) => (
+                  {topByViewsTyped.map((p, i) => (
                     <Link
                       key={p.id}
                       href={`/package/${p.id}`}
