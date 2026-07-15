@@ -1,0 +1,197 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/seva_connect_golf/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String         @id @default(cuid())
+  firstName     String?
+  lastName      String?
+  email         String         @unique
+  password      String?
+  streetAddress String?
+  phoneNumber   String?
+  acceptTerms   Boolean        @default(false)
+  role          String         @default("user")
+  emailVerified DateTime?
+  image         String?
+  sevaConsumerId String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  accounts      Account[]
+  bids          Bid[]
+  savedPackages SavedPackage[]
+  sessions      Session[]
+  wonPackages   WonPackage[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model GolfPackage {
+  id                  String         @id @default(cuid())
+  title               String
+  subHeader           String?
+  courseAddress       String
+  imageUrl            String
+  additionalImages    String[]       @default([])
+  startingBid         Decimal        @db.Decimal(10, 2)
+  currentBid          Decimal        @db.Decimal(10, 2)
+  buyNowPrice         Decimal        @db.Decimal(10, 2)
+  bidIncrement        Decimal        @db.Decimal(10, 2)
+  bidDeadline         DateTime
+  totalBids           Int            @default(0)
+  status              String         @default("active")
+  packageDetails      String?
+  bookingRestrictions String?
+  fairMarketValue     Decimal        @db.Decimal(10, 2)
+  supportsText        String?
+  orgDisplay          String?
+  supportsImages      String[]       @default([])
+  supportsLinks       String[]       @default([])
+  state               String?
+  city                String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  zipCode             String?
+  attributes          Json?
+  category            String         @default("Golf & Country Club")
+  isDemo              Boolean        @default(false)
+  viewCount           Int            @default(0)
+  orgSharePercent     Int            @default(50)
+  sponsorName         String?
+  sponsorThanksText   String?
+  sponsorWebUrl       String?
+  sponsorSevaUrl      String?
+  bids                Bid[]
+  savedPackages       SavedPackage[]
+  wonPackages         WonPackage[]
+
+  @@index([status, bidDeadline])
+  @@index([category])
+  @@index([isDemo])
+  @@index([state, city])
+  @@index([currentBid])
+}
+
+model Bid {
+  id        String      @id @default(cuid())
+  amount    Decimal     @db.Decimal(10, 2)
+  userId    String
+  packageId String
+  isWinning Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  package   GolfPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([packageId, amount])
+  @@index([userId])
+}
+
+model SavedPackage {
+  id        String      @id @default(cuid())
+  userId    String
+  packageId String
+  createdAt DateTime    @default(now())
+  package   GolfPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, packageId])
+}
+
+model WonPackage {
+  id                    String      @id @default(cuid())
+  userId                String
+  packageId             String
+  winningBid            Decimal     @db.Decimal(10, 2)
+  paymentStatus         String      @default("pending")
+  stripePaymentIntentId String?
+  createdAt             DateTime    @default(now())
+  package               GolfPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  user                  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, packageId])
+}
+
+model TermsAndConditions {
+  id        String   @id @default(cuid())
+  content   String
+  version   String   @default("1.0")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContentPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ApiConnection {
+  id              String    @id @default(cuid())
+  name            String
+  provider        String    @default("seva-connect")
+  baseUrl         String
+  apiKey          String
+  scopes          String[]  @default([])
+  isActive        Boolean   @default(true)
+  lastTestedAt    DateTime?
+  lastTestStatus  String?
+  lastTestMessage String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([provider, isActive])
+}
+
+model SiteSettings {
+  id               String   @id @default(cuid())
+  raisedForCharity String   @default("$127K")
+  activeAuctions   String   @default("48")
+  premiumCourses   String   @default("95+")
+  happyGolfers     String   @default("2.3K")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

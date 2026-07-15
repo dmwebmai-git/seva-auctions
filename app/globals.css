@@ -1,0 +1,488 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-orange: #FF9A17;
+  --color-teal: #94B957;
+  --color-burgundy: #BFA459;
+  --color-charcoal: #524C4C;
+  --color-green: #0DA354;
+  --color-gray: #8F8585;
+  --color-navy: #332E28;
+
+  /* shadcn/ui design tokens (light theme) */
+  --background: 0 0% 100%;
+  --foreground: 0 6% 30%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 6% 30%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 6% 30%;
+  --primary: 80 40% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 6% 30%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 3% 46%;
+  --accent: 0 0% 94%;
+  --accent-foreground: 0 6% 20%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 89%;
+  --input: 0 0% 89%;
+  --ring: 80 40% 53%;
+  --radius: 0.5rem;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--color-charcoal);
+  background-color: #fafafa;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+/* Custom components */
+.seva-container {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.seva-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.seva-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.seva-button-primary {
+  background-color: var(--color-teal) !important;
+  color: white !important;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seva-button-primary:hover {
+  background-color: #7A9941 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(148, 185, 87, 0.3);
+}
+
+.seva-button-secondary {
+  background-color: var(--color-orange) !important;
+  color: white !important;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seva-button-secondary:hover {
+  background-color: #E5850C !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 154, 23, 0.3);
+}
+
+.seva-button-outline {
+  background-color: transparent !important;
+  color: var(--color-teal) !important;
+  border: 2px solid var(--color-teal);
+  padding: 0.625rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seva-button-outline:hover {
+  background-color: var(--color-teal) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(148, 185, 87, 0.3);
+}
+
+.seva-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: 'Figtree', sans-serif;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.seva-input:focus {
+  outline: none;
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgba(148, 185, 87, 0.1);
+}
+
+.seva-input::placeholder {
+  color: #a0aec0;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.seva-fade-in {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes countUp {
+  from { 
+    opacity: 0;
+  }
+  to { 
+    opacity: 1;
+  }
+}
+
+.seva-count-up {
+  animation: countUp 2s ease-out;
+}
+
+/* Parallax hero */
+.seva-hero {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Sticky header */
+.seva-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Package grid */
+.seva-package-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .seva-package-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .seva-package-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .seva-package-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Countdown timer */
+.seva-countdown {
+  font-family: 'Figtree', monospace;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #dc2626;
+}
+
+/* Bidding interface */
+.seva-bidding-panel {
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Toast notifications */
+.seva-toast {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  border-left: 4px solid var(--color-teal);
+}
+
+/* Loading spinner */
+.seva-spinner {
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid var(--color-teal);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-teal);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7A9941;
+}
+
+/* Form validation */
+.seva-form-error {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.seva-form-success {
+  color: var(--color-green);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+/* Disable text selection on interactive elements */
+.seva-no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Image overlay effects */
+.seva-image-overlay {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.seva-image-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+}
+
+.seva-image-overlay:hover::after {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive text sizing */
+.seva-heading-xl {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .seva-heading-xl {
+    font-size: 1.875rem;
+  }
+}
+
+.seva-heading-lg {
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  .seva-heading-lg {
+    font-size: 1.5rem;
+  }
+}
+
+/* Hide scrollbar for carousel */
+.seva-hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.seva-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Rich content rendering (admin editor + public content pages) */
+.seva-content {
+  color: #524C4C;
+  line-height: 1.7;
+  font-size: 1.0625rem;
+}
+
+.seva-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #524C4C;
+  margin: 1.75rem 0 1rem;
+  line-height: 1.25;
+}
+
+.seva-content h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #524C4C;
+  margin: 1.5rem 0 0.875rem;
+  line-height: 1.3;
+}
+
+.seva-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #524C4C;
+  margin: 1.25rem 0 0.75rem;
+  line-height: 1.35;
+}
+
+.seva-content p {
+  margin: 0 0 1rem;
+}
+
+.seva-content ul,
+.seva-content ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.seva-content ul {
+  list-style: disc;
+}
+
+.seva-content ol {
+  list-style: decimal;
+}
+
+.seva-content li {
+  margin: 0.35rem 0;
+}
+
+.seva-content a {
+  color: #94B957;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.seva-content a:hover {
+  color: #7A9941;
+}
+
+.seva-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.25rem 0;
+}
+
+.seva-content blockquote {
+  border-left: 4px solid #94B957;
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 1.25rem 0;
+  color: #6b6666;
+  font-style: italic;
+}
+
+.seva-content strong {
+  font-weight: 700;
+}
+
+/* Call-to-action button (rendered in editor and on public pages) */
+.seva-content-button,
+a.seva-content-button {
+  display: inline-block;
+  background-color: #94B957;
+  color: #ffffff !important;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  margin: 0.5rem 0;
+  transition: background-color 0.2s ease;
+}
+
+.seva-content-button:hover,
+a.seva-content-button:hover {
+  background-color: #7A9941;
+  color: #ffffff !important;
+}
